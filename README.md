@@ -6,8 +6,11 @@ The notebook contains an exploration of listening habits, and song preferences o
 ## Favorite Plots
 ![Podcast Listening Data](https://github.com/nate-downer/spotify-analysis/blob/master/data/exported-images/podcasts.png?raw=true)
 
-![Percent of Each Hour Spent Listening](hhttps://github.com/nate-downer/spotify-analysis/blob/master/data/exported-images/pct_of_day.png?raw=true)
+
+![Percent of Each Hour Spent Listening](https://github.com/nate-downer/spotify-analysis/blob/master/data/exported-images/pct_of_day.png?raw=true)
+
 
 ![Mountain Goats Listening Data](https://github.com/nate-downer/spotify-analysis/blob/master/data/exported-images/mountain_goats.png?raw=true)
+
 
 ![Avett Brothers Listening Data](https://github.com/nate-downer/spotify-analysis/blob/master/data/exported-images/avett_brothers.png?raw=true)
