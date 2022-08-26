@@ -101,15 +101,15 @@ p_jitter <- ggplot(top_20_over_time,
   geom_jitter(height = .3, width = .2) +
   scale_color_manual(values = c("#1dab4f", "#566b5c")) +
   scale_y_date(date_breaks = "1 year",
-               limits = as.Date(c("2017-03-01", "2022-06-01"))) +
+               limits = as.Date(c("2017-03-01", "2022-07-01"))) +
   coord_flip() +
   labs(y = "",
-       x = "TOp 20 Artists + Podcasts (In Order of Total Listening Time)") +
+       x = "Top 20 Artists + Podcasts (In Order of Total Listening Time)") +
   theme(legend.position = "none",
         axis.text.x = element_blank(),
         plot.margin = margin(0,.3,0, .3, "cm"))
 
-# Plot hist of all songs played by month  
+# Plot bar graph of all songs and podcasts played by month on the same axis
 all_over_qtrs <- plb %>%
   mutate(quarter = paste(year(dt), "-", quarter(dt), sep = "")) %>%
   group_by(quarter, podcast) %>%
@@ -118,10 +118,15 @@ all_over_qtrs <- plb %>%
 
 first_months <- plb %>%
   mutate(quarter = paste(year(dt), "-", quarter(dt), sep = "")) %>%
-  arrange(desc(month)) %>%
+  arrange(month)
+
+first_months$month[first_months$quarter == "2017-1"] <- "2017-01"
+first_months$month[first_months$quarter == "2017-2"] <- "2017-04"
+
+first_months <- first_months %>%
   group_by(quarter) %>%
-  summarise(month = dplyr::first(month)) %>%
-  mutate(date = as.Date(paste(month, "-01", sep = ""))) %>%
+  summarise(first_month = dplyr::first(month)) %>%
+  mutate(date = as.Date(paste(first_month, "-01", sep = ""))) %>%
   ungroup()
 
 all_over_qtrs <- merge(all_over_qtrs, first_months, by = "quarter")
@@ -135,8 +140,8 @@ all_over_qtrs <- all_over_qtrs %>%
 for (i in 1:nrow(all_over_qtrs)) {
   if (all_over_qtrs[i, 2] == TRUE) {
     j <- (i - 1)
-    all_over_qtrs[i, 8] <- all_over_qtrs[j, 3]
-    all_over_qtrs[i, 9] <- (all_over_qtrs[j, 3] + all_over_qtrs[i, 3])
+    all_over_qtrs[j, 8] <- all_over_qtrs[i, 3]
+    all_over_qtrs[j, 9] <- (all_over_qtrs[i, 3] + all_over_qtrs[j, 3])
   }
 }
 
@@ -150,15 +155,15 @@ p_hist <- ggplot(all_over_qtrs) +
   scale_fill_manual(values = c("#1dab4f", "#566b5c")) +
   scale_x_date(date_breaks = "1 year",
                date_labels = "%Y",
-               limits = as.Date(c("2017-03-01", "2022-06-01"))) +
+               limits = as.Date(c("2017-03-01", "2022-07-01"))) +
   labs(x = "Year and Quarter",
-       y = "Min Played") +
+       y = "Total Min Played") +
   theme(legend.position = "none",
         plot.margin = margin(-0.3,.3,0.2,3.65, "cm"),
         axis.text.x = element_text(angle = 60, hjust = 1))
 
 # Show plot
-title <- ggdraw() + draw_label("Listening Paterns Over Time")
+title <- ggdraw() + draw_label("Listening Paterns (2017-2022)")
 grid1 = plot_grid(title, p_jitter, p_hist,
                   nrow = 3, rel_heights = c(0.07, 1, 0.25))
 
